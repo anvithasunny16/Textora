@@ -2,15 +2,20 @@
 Textora AI - Configuration
 """
 import os
+import tempfile
 from pathlib import Path
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
-DATA_DIR.mkdir(exist_ok=True)
+try:
+    DATA_DIR.mkdir(exist_ok=True)
+except OSError:
+    pass
 
-TEMP_UPLOAD_DIR = DATA_DIR / "temp_uploads"
-TEMP_UPLOAD_DIR.mkdir(exist_ok=True)
+# Temporary upload directory using OS temp directory (e.g. /tmp on Linux/Vercel, %TEMP% on Windows)
+TEMP_UPLOAD_DIR = Path(tempfile.gettempdir()) / "temp_uploads"
+TEMP_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 DB_PATH = DATA_DIR / "textora.db"
 
