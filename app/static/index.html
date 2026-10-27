@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textora AI — Intelligent Text Audit Platform</title>
+  <meta name="description" content="An advanced, probabilistic linguistic audit platform for students, researchers, and writers to evaluate syntactic rhythm, formulaic markers, and originality.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="app-header">
+    <div class="container header-inner">
+      <div class="brand-logo" data-view-target="landing">
+        <div class="brand-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Textora<span style="color: var(--accent-lime);">.AI</span></span>
+          <span class="brand-tag">Intelligent Text Audit</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#landing" onclick="navigateTo('landing'); return false;" class="nav-link active" data-view="landing" data-view-target="landing">Overview</a></li>
+          <li><a href="#workspace" onclick="navigateTo('workspace'); return false;" class="nav-link" data-view="workspace" data-view-target="workspace">Auditor Workspace</a></li>
+          <li><a href="#document-audit" onclick="navigateTo('document-audit'); return false;" class="nav-link" data-view="document-audit" data-view-target="document-audit">Document Audit</a></li>
+          <li><a href="#history" onclick="navigateTo('history'); return false;" class="nav-link" data-view="history" data-view-target="history">Audit History</a></li>
+          <li><a href="#settings" onclick="navigateTo('settings'); return false;" class="nav-link" data-view="settings" data-view-target="settings">Settings & Help</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="btn-toggle-theme" class="btn btn-icon" title="Toggle Theme">☀️</button>
+        <button class="btn btn-primary" onclick="navigateTo('workspace'); return false;" data-view-target="workspace">
+          <span>⚡</span>
+          <span>Start Auditing</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Router Container -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- ================================================================== -->
+      <!-- VIEW 1: LANDING PAGE                                               -->
+      <!-- ================================================================== -->
+      <section id="view-landing" class="app-view active">
+        <div class="hero-section">
+          <div class="hero-pill">
+            <span>●</span> Transparent Linguistic Heuristics & Diagnostics
+          </div>
+          <h1 class="hero-title">Know Your Text. <br><span>Understand Its Signals.</span></h1>
+          <p class="hero-subtitle">
+            An intelligent text auditing platform for students, researchers, educators, and authors. 
+            Evaluate structural burstiness, repetitive tropes, and vocabulary richness with observable linguistic evidence.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="navigateTo('workspace'); return false;" data-view-target="workspace">
+              <span>Start Auditing</span>
+              <span>→</span>
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="navigateTo('document-audit'); return false;" data-view-target="document-audit">
+              <span>Upload Document</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Sample Audit Preview -->
+        <div class="sample-preview-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+              Live Interactive Audit Preview
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted);">
+              Click sample styles to inspect real signal differences:
+            </div>
+          </div>
+          
+          <div class="sample-pills">
+            <button class="sample-pill-btn active" data-sample="ai">🤖 Synthetic Academic Essay</button>
+            <button class="sample-pill-btn" data-sample="human">✍️ Authentic Human Memoir</button>
+            <button class="sample-pill-btn" data-sample="hybrid">🔀 Hybrid Editorial Draft</button>
+          </div>
+
+          <div class="sample-preview-body">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase;">
+                Sample Text Passage:
+              </div>
+              <div id="sample-preview-text" class="sample-text-box">
+                Loading sample passage...
+              </div>
+            </div>
+            <div class="sample-stats-box">
+              <div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase;">
+                  Estimated Linguistic Signals:
+                </div>
+                <div style="display: flex; gap: 16px; margin-bottom: 14px;">
+                  <div>
+                    <div style="font-size: 24px; font-weight: 800; color: var(--risk-coral);" id="sample-ai-score">84%</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">AI Pattern Signal</div>
+                  </div>
+                  <div>
+                    <div style="font-size: 24px; font-weight: 800; color: var(--human-green);" id="sample-human-score">16%</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Human Pattern Signal</div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                  <span id="sample-verdict" class="badge badge-ai">Likely AI-Generated</span>
+                </div>
+              </div>
+              
+              <div style="font-size: 12px; color: var(--text-secondary); background: var(--bg-secondary); padding: 10px; border-radius: var(--radius-sm);">
+                <div>Burstiness (CV): <strong id="sample-cv" style="color: var(--text-primary);">0.22</strong> (Uniform)</div>
+                <div>Formulaic Markers: <strong id="sample-markers" style="color: var(--risk-coral);">5 clichés</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Feature Cards -->
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3 class="feature-title">Multi-Signal Diagnostics</h3>
+            <p class="feature-desc">Analyzes sentence length variance (burstiness), vocabulary richness (TTR & Hapax), and predictability to reveal structural patterns.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <h3 class="feature-title">Multi-Format Document Parsing</h3>
+            <p class="feature-desc">Seamlessly extracts text from TXT, PDF, Word (DOCX), and PowerPoint (PPTX) with slide titles, text boxes, and presenter notes.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h3 class="feature-title">Sentence-Level Evidence</h3>
+            <p class="feature-desc">Interactive sentence highlighter pinpoints formulaic transitions like <em>"delve into"</em> or <em>"testament to"</em> with observable explanations.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <h3 class="feature-title">Audits & Branded Reports</h3>
+            <p class="feature-desc">Saved SQLite audit records with full search, and one-click downloadable branded PDF reports with comprehensive diagnostics.</p>
+          </div>
+        </div>
+
+        <!-- Probabilistic Disclaimer Banner -->
+        <div class="disclaimer-box">
+          <span style="font-size: 20px;">ℹ️</span>
+          <div>
+            <p><strong>Probabilistic Assessment Disclaimer:</strong> Textora AI identifies stylistic markers and linguistic predictability. AI text analysis is fundamentally probabilistic and cannot establish authorship with absolute certainty. Human writers occasionally write formulaic prose, and AI models can simulate varied styles. Always use findings as an analytical writing aid, never as definitive proof.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- VIEW 2: AUDITOR WORKSPACE                                          -->
+      <!-- ================================================================== -->
+      <section id="view-workspace" class="app-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">Auditor Workspace</h2>
+          <p style="color: var(--text-secondary); font-size: 14px;">Paste raw text, load sample scenarios, or upload multi-format documents for transparent linguistic auditing.</p>
+        </div>
+
+        <div class="workspace-grid">
+          <!-- Left: Editor Pane -->
+          <div class="card editor-card">
+            <div class="editor-toolbar">
+              <div class="editor-counts">
+                <div>Words: <span id="count-words" class="count-badge">0</span></div>
+                <div>Chars: <span id="count-chars" class="count-badge">0</span></div>
+                <div>Sentences: <span id="count-sentences" class="count-badge">0</span></div>
+                <div>Reading: <span id="count-reading-time" class="count-badge">0s</span></div>
+              </div>
+
+              <div class="editor-actions">
+                <button type="button" class="btn btn-outline btn-sm" onclick="window.WorkspaceManager.loadPreset('ai')">🤖 AI Sample</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="window.WorkspaceManager.loadPreset('human')">✍️ Human Sample</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="window.WorkspaceManager.loadPreset('hybrid')">🔀 Hybrid</button>
+                <button id="btn-editor-paste" class="btn btn-outline btn-sm" title="Paste Clipboard">Paste</button>
+                <button id="btn-editor-undo" class="btn btn-outline btn-sm" title="Undo Edit">Undo</button>
+                <button id="btn-editor-clear" class="btn btn-outline btn-sm" title="Clear All">Clear</button>
+              </div>
+            </div>
+
+            <textarea 
+              id="editor-textarea" 
+              class="editor-textarea" 
+              placeholder="Paste or type your text here to begin analysis... (Minimum 10 words for statistical reliability)"
+            ></textarea>
+          </div>
+
+          <!-- Right: Uploads & Controls Pane -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- Drag and Drop Dropzone -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">📁 Document Upload</div>
+                  <div class="card-desc">Supported: TXT, PDF, DOCX, PPTX (up to 25MB)</div>
+                </div>
+              </div>
+
+              <div id="workspace-dropzone" class="dropzone">
+                <input type="file" id="workspace-file-input" style="display: none;" multiple accept=".txt,.pdf,.docx,.pptx">
+                <div class="dropzone-icon">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div class="dropzone-title">Drop documents here or click to browse</div>
+                <div class="dropzone-sub">Automatic text extraction for Word, PDF & PowerPoint slides</div>
+                <button type="button" class="btn btn-secondary btn-sm">Browse Files</button>
+              </div>
+
+              <!-- File Queue List -->
+              <div id="workspace-file-queue" class="file-queue"></div>
+            </div>
+
+            <!-- Analysis Trigger Card -->
+            <div class="card" style="border-top: 3px solid var(--accent-lime);">
+              <div style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">Run Linguistic Audit</div>
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 18px;">
+                Computes burstiness, Type-Token Ratio, Hapax Legomena, readability grade, and scans for 100+ formulaic tropes.
+              </p>
+
+              <button id="btn-analyze-content" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 15px;" onclick="window.WorkspaceManager.analyzeContent()">
+                <span>⚡</span>
+                <span>Analyze Content</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- VIEW 3: RESULTS DASHBOARD                                          -->
+      <!-- ================================================================== -->
+      <section id="view-results" class="app-view">
+        <div class="results-header">
+          <div class="results-title-group">
+            <h2 id="res-doc-title">Audited Document</h2>
+            <div class="results-meta">
+              <span id="res-doc-date">Just now</span>
+              <span>•</span>
+              <span id="res-method-badge" class="badge badge-neutral">Built-in Linguistic Heuristics</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button id="btn-export-pdf" class="btn btn-primary btn-sm">
+              <span>📄</span> Download PDF Report
+            </button>
+            <button id="btn-export-json" class="btn btn-outline btn-sm">
+              <span>📋</span> JSON
+            </button>
+            <button id="btn-export-print" class="btn btn-outline btn-sm">
+              <span>🖨️</span> Print / HTML
+            </button>
+            <button class="btn btn-secondary btn-sm" data-view-target="workspace">
+              <span>←</span> New Audit
+            </button>
+          </div>
+        </div>
+
+        <!-- Executive Score Hero Card -->
+        <div class="score-hero-card">
+          <div class="score-hero-grid">
+            <!-- AI Likeness Gauge -->
+            <div class="gauge-block">
+              <div class="gauge-label">
+                <span>AI-Like Pattern Signal</span>
+                <span id="gauge-ai-val" style="color: var(--risk-coral);">0%</span>
+              </div>
+              <div class="gauge-bar-bg">
+                <div id="gauge-ai-bar" class="gauge-bar-fill gauge-ai" style="width: 0%;"></div>
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-muted);">
+                Uniform pacing, formulaic tropes, repetitive structure
+              </div>
+            </div>
+
+            <!-- Human Likeness Gauge -->
+            <div class="gauge-block">
+              <div class="gauge-label">
+                <span>Human-Like Pattern Signal</span>
+                <span id="gauge-human-val" style="color: var(--human-green);">0%</span>
+              </div>
+              <div class="gauge-bar-bg">
+                <div id="gauge-human-bar" class="gauge-bar-fill gauge-human" style="width: 0%;"></div>
+              </div>
+              <div style="font-size: 11.5px; color: var(--text-muted);">
+                High burstiness, authentic cadence, diverse vocabulary
+              </div>
+            </div>
+
+            <!-- Overall Verdict & Confidence -->
+            <div class="verdict-box">
+              <div class="verdict-header">
+                <span id="res-verdict-badge" class="badge badge-mixed">Evaluating</span>
+                <span id="res-conf-badge" class="badge badge-neutral" style="font-size: 10px;">Confidence: High</span>
+              </div>
+              <div id="res-verdict-text" class="verdict-desc">
+                Analyzing observable linguistic traits across text...
+              </div>
+              <div id="res-conf-explanation" style="font-size: 11.5px; color: var(--text-muted); margin-top: 6px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Sentence-by-Sentence Explorer -->
+        <div class="card sentence-explorer-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔍 Sentence-by-Sentence Analysis</div>
+              <div class="card-desc">Click any passage below to inspect its exact observable triggers and metrics.</div>
+            </div>
+
+            <div class="filter-pills">
+              <button class="filter-btn active" data-filter="all">All Sentences</button>
+              <button class="filter-btn" data-filter="ai" style="color: var(--risk-coral);">AI-Leaning</button>
+              <button class="filter-btn" data-filter="human" style="color: var(--human-green);">Human-Leaning</button>
+              <button class="filter-btn" data-filter="mixed" style="color: var(--neutral-amber);">Mixed / Neutral</button>
+            </div>
+          </div>
+
+          <div id="sentence-stream-container" class="sentence-stream">
+            <!-- Rendered via JS -->
+          </div>
+
+          <!-- Sentence Inspector Drawer -->
+          <div id="sentence-inspector" class="sentence-inspector">
+            <div class="inspector-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <strong id="insp-sentence-index" style="font-size: 13.5px;">Sentence #1</strong>
+                <span id="insp-signal-badge" class="badge badge-ai">AI-LEANING</span>
+                <span id="insp-score" style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent-lime);">78%</span>
+              </div>
+              <div id="insp-meta-counts" style="font-size: 12px; color: var(--text-muted);"></div>
+            </div>
+            <div id="insp-text" class="inspector-text">"..."</div>
+            <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase;">
+              Observable Linguistic Factors:
+            </div>
+            <div id="insp-reasons-list" class="inspector-reasons"></div>
+          </div>
+        </div>
+
+        <!-- Deep Dive Metrics Quad-Grid -->
+        <div class="metrics-quad-grid">
+          <!-- Metric 1: Burstiness -->
+          <div class="card">
+            <div class="card-title">📊 Sentence Burstiness</div>
+            <div class="card-desc">Variation in sentence length (CV = σ / μ)</div>
+            <div id="metric-burst-cv" class="metric-stat-hero">0.0</div>
+            <div id="metric-burst-label" style="font-size: 12.5px; font-weight: 600; color: var(--accent-lime);">Analyzing...</div>
+            <div id="metric-burst-mean" style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">0 words/sentence</div>
+
+            <div class="mini-bar-group">
+              <div class="mini-bar-item">
+                <span class="mini-bar-label">Short (1-10w)</span>
+                <div class="mini-bar-track"><div id="dist-short" class="mini-bar-fill" style="width: 0%;"></div></div>
+              </div>
+              <div class="mini-bar-item">
+                <span class="mini-bar-label">Medium (11-20w)</span>
+                <div class="mini-bar-track"><div id="dist-med" class="mini-bar-fill" style="width: 0%;"></div></div>
+              </div>
+              <div class="mini-bar-item">
+                <span class="mini-bar-label">Long (21-30w)</span>
+                <div class="mini-bar-track"><div id="dist-long" class="mini-bar-fill" style="width: 0%;"></div></div>
+              </div>
+              <div class="mini-bar-item">
+                <span class="mini-bar-label">Extended (31+w)</span>
+                <div class="mini-bar-track"><div id="dist-ext" class="mini-bar-fill" style="width: 0%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metric 2: Lexical Richness -->
+          <div class="card">
+            <div class="card-title">📚 Lexical Diversity</div>
+            <div class="card-desc">Type-Token Ratio & Hapax Legomena</div>
+            <div id="metric-lex-ttr" class="metric-stat-hero">0.0</div>
+            <div id="metric-lex-label" style="font-size: 12.5px; font-weight: 600; color: var(--accent-lime);">Rich Vocabulary</div>
+            <div id="metric-lex-hapax" style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">0 unique words</div>
+          </div>
+
+          <!-- Metric 3: Formulaic Patterns -->
+          <div class="card">
+            <div class="card-title">⚡ Formulaic Tropes</div>
+            <div class="card-desc">Common algorithmic discourse markers</div>
+            <div id="metric-form-count" class="metric-stat-hero" style="color: var(--risk-coral);">0</div>
+            <div id="metric-form-density" style="font-size: 12.5px; font-weight: 600; color: var(--text-secondary);">0 per 100 words</div>
+            <div id="metric-form-tags" class="marker-tag-cloud"></div>
+          </div>
+
+          <!-- Metric 4: Readability -->
+          <div class="card">
+            <div class="card-title">📖 Readability Complexity</div>
+            <div class="card-desc">Standard phonetic & structural grade scales</div>
+            <div id="metric-read-grade" class="metric-stat-hero">Grade 8.0</div>
+            <div id="metric-read-fre" style="font-size: 12.5px; font-weight: 600; color: var(--accent-lime);">Reading Ease: Standard</div>
+            <div id="metric-read-fog" style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Gunning Fog Index</div>
+          </div>
+        </div>
+
+        <!-- Recommendations Card -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-title">💡 Originality & Clarity Recommendations</div>
+          <div class="card-desc">Actionable editorial guidance to improve natural rhythm, voice, and vocabulary.</div>
+          <div id="recs-container" class="recs-container"></div>
+        </div>
+
+        <!-- Disclaimer Footer -->
+        <div class="disclaimer-box">
+          <span style="font-size: 20px;">🛡️</span>
+          <div>
+            <p><strong>Methodological Notice:</strong> This report reflects statistical text features computed directly from the provided text sample. It does not establish legal or academic authorship, and false positives or false negatives are possible.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- VIEW 4: DOCUMENT AUDIT                                             -->
+      <!-- ================================================================== -->
+      <section id="view-document-audit" class="app-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 28px; font-weight: 800;">Dedicated Document Audit</h2>
+          <p style="color: var(--text-secondary); font-size: 14px;">Upload full PDF documents, Word DOCX files, PowerPoint decks, or text files to inspect and audit sections.</p>
+        </div>
+
+        <!-- Upload Dropzone -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div id="doc-audit-dropzone" class="dropzone">
+            <input type="file" id="doc-audit-file-input" style="display: none;" accept=".txt,.pdf,.docx,.pptx">
+            <div class="dropzone-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="dropzone-title">Upload a PDF, Word (DOCX), PowerPoint (PPTX), or TXT document</div>
+            <div class="dropzone-sub">Extracts page-by-page, headings, tables, or slide titles & presenter notes</div>
+            <button type="button" class="btn btn-primary btn-sm">Choose Document</button>
+          </div>
+        </div>
+
+        <!-- Scanned PDF Alert Banner -->
+        <div id="doc-audit-scanned-notice" class="disclaimer-box" style="display: none; border-left-color: var(--risk-coral); margin-bottom: 24px;">
+        </div>
+
+        <!-- Empty State -->
+        <div id="doc-audit-empty-state" class="card" style="text-align: center; padding: 48px 20px;">
+          <div style="font-size: 38px; margin-bottom: 12px;">📁</div>
+          <div style="font-size: 16px; font-weight: 700; margin-bottom: 6px;">No Document Loaded</div>
+          <div style="font-size: 13.5px; color: var(--text-secondary); max-width: 480px; margin: 0 auto 16px auto;">
+            Upload a file above to extract its structure, preview extracted text, and audit individual sections or slides.
+          </div>
+        </div>
+
+        <!-- Document Split Layout -->
+        <div id="doc-audit-layout" class="doc-audit-layout" style="display: none;">
+          <!-- Section / Slide List -->
+          <div>
+            <div class="card" style="padding: 16px;">
+              <div style="margin-bottom: 14px;">
+                <div id="doc-audit-filename" style="font-size: 15px; font-weight: 700; word-break: break-all;">Document</div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                  <span id="doc-audit-type-badge" class="badge badge-lime">PDF</span>
+                  <span id="doc-audit-stats" style="font-size: 12px; color: var(--text-muted);">0 words</span>
+                </div>
+              </div>
+
+              <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px;">
+                Sections & Slides:
+              </div>
+              <div id="doc-audit-section-list" class="section-nav-list"></div>
+            </div>
+          </div>
+
+          <!-- Section Preview & Actions -->
+          <div class="doc-preview-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <div>
+                <h3 id="doc-preview-section-title" style="font-size: 18px; font-weight: 700;">Section Preview</h3>
+                <div id="doc-preview-words" style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">0 words</div>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button id="btn-audit-selected-section" class="btn btn-secondary btn-sm">
+                  <span>⚡</span> Audit This Section
+                </button>
+                <button id="btn-audit-entire-doc" class="btn btn-primary btn-sm">
+                  <span>⚡</span> Audit Entire Document
+                </button>
+              </div>
+            </div>
+
+            <div id="doc-preview-text" class="extracted-text-area"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- VIEW 5: AUDIT HISTORY                                              -->
+      <!-- ================================================================== -->
+      <section id="view-history" class="app-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 28px; font-weight: 800;">Audit History</h2>
+          <p style="color: var(--text-secondary); font-size: 14px;">Review previous audit results, filter by file format, or re-download official PDF reports.</p>
+        </div>
+
+        <div class="card">
+          <div class="history-controls">
+            <div class="search-input-box">
+              <span>🔍</span>
+              <input type="text" id="history-search-input" placeholder="Search by document name or keywords...">
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <select id="history-type-filter" class="btn btn-outline btn-sm">
+                <option value="all">All Formats</option>
+                <option value="text">Text Pastes</option>
+                <option value="pdf">PDF Documents</option>
+                <option value="docx">Word (DOCX)</option>
+                <option value="pptx">PowerPoint (PPTX)</option>
+              </select>
+
+              <button id="btn-history-refresh" class="btn btn-secondary btn-sm" title="Refresh">↻ Refresh</button>
+              <button id="btn-history-clear" class="btn btn-outline btn-sm" style="color: var(--risk-coral);" title="Clear DB">Clear All</button>
+              <span id="history-record-count" class="badge badge-neutral">0 records</span>
+            </div>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Document Name</th>
+                  <th>Audit Date</th>
+                  <th>Words</th>
+                  <th>Signal Balance</th>
+                  <th>Classification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="disclaimer-box" style="margin-top: 20px;">
+          <span style="font-size: 20px;">💾</span>
+          <div>
+            <p><strong>Persistence Notice:</strong> Audit records are stored locally in the backend SQLite database (<code>textora.db</code>). Records are private and can be exported as PDFs or purged at any time using the "Clear All" button.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================== -->
+      <!-- VIEW 6: SETTINGS & HELP                                            -->
+      <!-- ================================================================== -->
+      <section id="view-settings" class="app-view">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-size: 28px; font-weight: 800;">Settings & Help</h2>
+          <p style="color: var(--text-secondary); font-size: 14px;">Configure audit sensitivity, external API detection keys, review guidelines, and explore frequently asked questions.</p>
+        </div>
+
+        <div class="card settings-section">
+          <div class="card-title">Engine Configuration</div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-title">Analysis Sensitivity</div>
+              <div class="setting-desc">Adjust threshold strictness when evaluating formulaic transitions and sentence uniformity.</div>
+            </div>
+            <div>
+              <select id="setting-sensitivity" class="btn btn-secondary btn-sm">
+                <option value="conservative">Conservative (Minimizes false positives)</option>
+                <option value="balanced" selected>Balanced (Standard academic & editorial)</option>
+                <option value="sensitive">Sensitive (Aggressive cliché detection)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-title">Detection Method & Provider</div>
+              <div class="setting-desc">Choose between the 100% private built-in linguistic heuristics engine or an external detection provider.</div>
+            </div>
+            <div>
+              <select id="setting-provider" class="btn btn-secondary btn-sm">
+                <option value="heuristic" selected>Built-in Linguistic Heuristics v1.0 (Local & Private)</option>
+                <option value="external_api">External Detection Provider (Requires API Key)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="setting-api-key-group" class="setting-row" style="display: none;">
+            <div class="setting-info">
+              <div class="setting-title">External API Key</div>
+              <div class="setting-desc">Enter provider API credential. Stored only in your active browser session and never logged to disk.</div>
+            </div>
+            <div>
+              <input type="password" id="setting-api-key" placeholder="sk-..." class="btn btn-secondary btn-sm" style="text-align: left; width: 220px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Format Guidelines Card -->
+        <div class="card settings-section">
+          <div class="card-title">Supported Formats & Limits</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.6;">
+            <table class="custom-table" style="margin-top: 10px;">
+              <thead>
+                <tr>
+                  <th>Format</th>
+                  <th>Extension</th>
+                  <th>Max File Size</th>
+                  <th>Extracted Elements</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Plain Text</strong></td>
+                  <td>.txt, .md</td>
+                  <td>25 MB</td>
+                  <td>Raw characters, auto-detected UTF-8/UTF-16 encoding</td>
+                </tr>
+                <tr>
+                  <td><strong>PDF Document</strong></td>
+                  <td>.pdf</td>
+                  <td>25 MB</td>
+                  <td>Page-by-page text layer (alerts if scanned/image-only)</td>
+                </tr>
+                <tr>
+                  <td><strong>Word Document</strong></td>
+                  <td>.docx</td>
+                  <td>25 MB</td>
+                  <td>Paragraphs, Heading 1/2 sections, and embedded tables</td>
+                </tr>
+                <tr>
+                  <td><strong>PowerPoint</strong></td>
+                  <td>.pptx</td>
+                  <td>25 MB</td>
+                  <td>Slide titles, text boxes, and presenter notes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Privacy & Ethics Card -->
+        <div class="card settings-section">
+          <div class="card-title">Privacy & Data Governance</div>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-top: 8px;">
+            Textora AI treats written content with strict confidentiality. Uploaded documents are parsed in ephemeral memory and discarded immediately after text extraction. Your submitted text is never sold, never shared with third parties, and never used to train machine learning models. Audit records are stored in your private local SQLite database.
+          </p>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="card settings-section">
+          <div class="card-title">Frequently Asked Questions</div>
+          
+          <div class="faq-list">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Can AI detection guarantee 100% accuracy?</span>
+                <span class="faq-icon">▼</span>
+              </div>
+              <div class="faq-answer">
+                No. Current artificial intelligence text detectors cannot establish authorship with absolute certainty. Both false positives (flagging human writing as synthetic) and false negatives (missing generated text) are common. Textora AI provides transparent statistical diagnostics so you can inspect the exact linguistic reasons behind any score.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>What is "Burstiness" and why does it matter?</span>
+                <span class="faq-icon">▼</span>
+              </div>
+              <div class="faq-answer">
+                Burstiness measures the variation in sentence length and syntactic complexity. Human authors naturally alternate between short, punchy statements and long, descriptive clauses. Large language models (LLMs) tend to produce sentences with remarkably uniform length (typically 16–22 words per sentence), resulting in low burstiness.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Why are short texts flagged with "Low Confidence"?</span>
+                <span class="faq-icon">▼</span>
+              </div>
+              <div class="faq-answer">
+                Linguistic metrics like Type-Token Ratio, Hapax Legomena, and sentence-length variance require a statistically meaningful sample size. Passages under 50 words lack sufficient data points to draw reliable conclusions, which is why Textora AI clearly indicates low confidence.
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Are scanned PDF files supported?</span>
+                <span class="faq-icon">▼</span>
+              </div>
+              <div class="faq-answer">
+                Textora AI automatically checks whether a PDF contains an embedded text layer. If a scanned document or image-only PDF is uploaded, the platform detects the absence of text and displays a clear notice explaining that Optical Character Recognition (OCR) is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div>
+        <div style="font-weight: 800; color: var(--text-primary); font-size: 15px;">Textora AI</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+          Intelligent Text Audit Platform &bull; Built with FastAPI & Modern Linguistic Diagnostics
+        </div>
+      </div>
+
+      <ul class="footer-links">
+        <li><a href="#" data-view-target="landing">Overview</a></li>
+        <li><a href="#" data-view-target="workspace">Auditor</a></li>
+        <li><a href="#" data-view-target="document-audit">Documents</a></li>
+        <li><a href="#" data-view-target="history">History</a></li>
+        <li><a href="#" data-view-target="settings">Settings & FAQ</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/workspace.js"></script>
+  <script src="/static/js/analysis.js"></script>
+  <script src="/static/js/document_audit.js"></script>
+  <script src="/static/js/history.js"></script>
+  <script src="/static/js/settings.js"></script>
+</body>
+</html>
